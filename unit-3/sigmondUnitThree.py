@@ -159,7 +159,12 @@ def linearRegression(L):
     sumX2 = sum(xList[i]**2 for i in range(n))
     slope = (sumX * sumY - (n * sumXY)) / ((sumX**2) - (n * sumX2))
     offset = (sumX * sumXY - (sumY * sumX2)) / ((sumX**2) - (n * sumX2))
-    return slope, offset
+    yHat = [slope * xList[i] + offset for i in range(n)]
+    ssDev = sum([(yList[i] - (sumY/n)) for i in range(n)])
+    ssRes = sum([(yList[i] - yHat[i])**2 for i in range(n)])
+    if ssDev == 0: r2 = 1
+    else: r2 = (ssDev - ssRes) / ssDev
+    return slope, offset, r2
 
 def exponentialRegression(L):
     return None
