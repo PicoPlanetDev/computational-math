@@ -95,14 +95,32 @@ def isNearlySorted(L):
 def dotProduct(a,b):
     return sum(ai*bi for ai, bi in zip(a, b))
 
-def duplicates(a):
-    listSet = list(set(a))
-    if list(set(a)) == sorted(a):
-        return []
-    return listSet
+# Uses dictionaries, not sure if that's allowed
+# Returns a list of the duplicate items in a list
+# def duplicates(a):
+#     list_items = {}
+#     duplicates = []
+#     for x in a:
+#         if x not in list_items: list_items[x] = 1
+#         else:
+#             if list_items[x] == 1: duplicates.append(x)
+#             list_items[x] += 1
+#     return sorted(duplicates)
 
+# Uses list comprehension for brevity
+# Returns a list of the duplicate items in a list
+def duplicates(a):
+    return sorted(set([x for x in a if a.count(x) > 1]))
+
+# Returns the smallest absolute difference between the closest values in a
 def smallestDifference(a):
-    return None
+    smallestDifference = 0
+    if a == []: return -1
+    for i in range(len(a)):
+        for j in range(i+1, len(a)):
+            if i==0 and j==1: smallestDifference = abs(a[i]-a[j]) # Initialize the smallest difference to the first difference
+            if abs(a[i]-a[j]) < smallestDifference: smallestDifference = abs(a[i]-a[j])
+    return smallestDifference
 
 def lookAndSay(L):
     return None
@@ -120,7 +138,12 @@ def rotateList(a,n):
     return None
 
 def moveToBack(a,b):
-    return None
+    for i in range(len(b)):
+        for j in range(len(a)):
+            if a[j] == b[i]:
+                a.remove(a[j])
+                a.append(b[i])
+    return a
 
 def linearRegression(L):
     return None
