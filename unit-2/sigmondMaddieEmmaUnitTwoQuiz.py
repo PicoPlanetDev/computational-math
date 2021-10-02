@@ -3,8 +3,47 @@
 ######################################################################
 import math
 
+# Helper functions copied from other units
+# Returns true if x and y are equal within floating point error
 def almostEqual(x,y):
     return abs(x-y)<10**-10
+# Returns true if n is a prime number
+def isPrime(n):
+    if (n < 2): return False
+    if (n == 2): return True
+    if (n % 2 == 0): return False
+    for factor in range(3,round(n**0.5)+1,2):
+        if (n % factor == 0): return False
+    return True
+# Returns the number of digits in n
+def digitCount(n):
+    n=abs(n)
+    counter=0
+    while True:
+        n//=10
+        counter+=1
+        if (n==0): return counter
+# Returns the kth digit of n counting from the right  
+def kthDigit(n, k):
+    return int(abs(n) // (10**k) % 10)
+# Helper function for isRotation
+def findRotations(n, rotations):
+    number = n
+    digit = digitCount(number)
+    power = pow(10, digit - 1)
+    for i in range(rotations - 1):
+        firstDigit = number // power
+        left = (number * 10 + firstDigit - (firstDigit * power * 10))
+        number = left
+    return number
+# Returns true if x is a rotation of y or y is a rotation of x, otherwise returns false
+def isRotation(x,y):
+    if (x==y): return True
+    for i in range(digitCount(x)+1):            
+        if findRotations(x,i)==y: return True
+    for i in range(digitCount(y)+1):            
+        if findRotations(y,i)==x: return True
+    return False
 
 def sumOfFirstMIntegersDivisibleByN(m,n):
     total = 0
@@ -18,7 +57,12 @@ def sumOfFirstMIntegersDivisibleByN(m,n):
     return total
 
 def largestSumOfAdjacentDigits(n):
-    return None
+    largest = 0
+    for i in range(digitCount(n)):
+        current = kthDigit(n, i) + kthDigit(n, i+1)
+        if current > largest:
+            largest = current
+    return largest
 
 def isPermutation(a,b):
     zero = one = two = three = four = five = six = seven = eight = nine = 0
@@ -63,76 +107,112 @@ def estimateExponentialFunction(x,terms):
     return total
 
 def sumOfProductsOfAllIntegerPairsLessThanN(n):
-    return None
+    total = 0
+    for i in range(1, n):
+        for j in range(i, n):
+            total += i*j
+    return total
+
+def isSexyPrime(a, b):
+    return isPrime(a) and isPrime(b) and (b-a==6)
 
 def nthSexyPrime(n):
-    return None
+    count = 0
+    current = 0
+    while (count <= n):
+        current += 1
+        if (isSexyPrime(current,current+6)):
+            count += 1
+    return (current)
+
+def isSemiPrime(n):
+    count = 0
+    for i in range(2, int(math.sqrt(n)) + 1):
+        while n % i == 0:
+            n /= i
+            count += 1
+        if count >= 2: break
+    if(n > 1): count += 1
+    return count == 2
 
 def nthSemiprime(n):
-    return None
+    count = 0
+    current = 0
+    while (count <= n):
+        current += 1
+        if (isSemiPrime(current)):
+            count += 1
+    return current
 
-# Returns the number of digits in n
-def digitCount(n):
-    n=abs(n)
-    counter=0
-    while True:
-        n//=10
-        counter+=1
-        if (n==0): return counter
-
-# Returns the kth digit of n counting from the right  
-def kthDigit(n, k):
-    return int(abs(n) // (10**k) % 10)
-
-# Returns true if n has at least two digits next to each other that are the same
-def hasConsecutiveDigits(n):
-    if digitCount(n) <= 1: return False
+def isCircularPrime(n):
+    if not isPrime(n): return False
     for i in range(digitCount(n)):
-        if kthDigit(n, i) == kthDigit(n, i+1):
-            return True
-    return False
-
-# Replaces the kth digit k of a number n with the digit d returning the result
-def setKthDigit(n, k, d):
-    return n-((n//10**k)%10*10**k)+(10**k*d)
-
-# Helper function for isRotation
-def findRotations(n, rotations):
-    number = n
-    digit = digitCount(number)
-    power = pow(10, digit - 1)
-    for i in range(rotations - 1):
-        firstDigit = number // power
-        left = (number * 10 + firstDigit - (firstDigit * power * 10))
-        number = left
-    return number
-
-# Returns true if x is a rotation of y or y is a rotation of x, otherwise returns false
-def isRotation(x,y):
-    if (x==y): return True
-    for i in range(digitCount(x)+1):            
-        if findRotations(x,i)==y: return True
-    for i in range(digitCount(y)+1):            
-        if findRotations(y,i)==x: return True
-    return False
-
-# Returns true if n is a prime number
-def isPrime(n):
-    if (n < 2): return False
-    if (n == 2): return True
-    if (n % 2 == 0): return False
-    for factor in range(3,round(n**0.5)+1,2):
-        if (n % factor == 0): return False
+        if not isPrime(findRotations(n, i+1)): return False
     return True
 
 def nthCircularPrime(n):
-    return None
+    count = 0
+    current = 0
+    while (count <= n):
+        current += 1
+        if (isCircularPrime(current)):
+            count += 1
+    return current
+
+def isAbundantNumber(n):
+    total = 0
+    i = 1
+    while i<=(math.sqrt(n)):
+        if n%i == 0:
+            if n/i == i: total = total + i
+            else:
+                total = total + i
+                total = total + (n / i )
+        i = i + 1
+    total = total - n
+    return total > n
 
 def nthAbundantNumber(n):
-    return None
+    count = 0
+    current = 0
+    while (count <= n):
+        current += 1
+        if (isAbundantNumber(current)):
+            count += 1
+    return current
 
-def harderCannonAiming( initialHeight,targetRange):
-    return None
+def degToRad(degrees):
+    return degrees * (math.pi / 180)
+
+def higherQuadraticFormula(a,b,c):
+    x1 = (-b + math.sqrt(b**2 - 4*a*c)) / (2*a)
+    x2 = (-b - math.sqrt(b**2 - 4*a*c)) / (2*a)
+    return max(x1,x2)
+
+def harderCannonAiming(initialHeight,targetRange):
+    v0 = 600 #ft/s
+    thetaStep = 0.01 #degrees
+    g = 32 #ft/s^2
+    bestDeviation = 0
+    bestAngle = 0
+    i = 0
+    while i < 90:
+        i = round(i+thetaStep, 2)
+        theta = degToRad(i)
+        v0y = v0 * math.sin(theta)
+        v0x = v0 * math.cos(theta)
+        tAir = higherQuadraticFormula(-0.5 * g, v0y, initialHeight)
+        hit = v0x * tAir
+        if i == 0.01:
+            bestDeviation = abs(targetRange - hit)
+            bestAngle = i
+        else: 
+            if abs(hit - targetRange) <= bestDeviation:
+                bestDeviation = abs(hit - targetRange)
+                bestAngle = i
+            if abs(hit - targetRange) > bestDeviation:
+                break
+    return bestAngle
 
 
 #############################################################################
