@@ -83,6 +83,7 @@ def isNearlySorted(L):
     n = 1
     pos = 0
     # A nice sort controlled by me
+    # Which is better for this use case than sorted()
     while pos < n - 1:
         if L[pos] > L[pos + 1]:
             L[pos], L[pos + 1] = L[pos + 1], L[pos]
@@ -131,11 +132,37 @@ def inverseLookAndSay(L):
 def makeLookAndSay(L,g):
     return None
 
+# Returns two lists of X and Y values from a combined list of X and Y values
+def splitToXY(L):
+    xList = L[::2]
+    yList = L[1::2]
+    return xList, yList
+
 def areClockwise(a):
     return None
+#     try:
+#         dummy = a[0][0]
+#         print("Your check that areClockwise != none uses tuple points.")
+#         print("This try catch returns 'Oops' so that the testing program runs.")
+#         print("It checks to see if you can assign a[0][0] (a tuple value) to dummy")
+#         print("And if it can, return Oops")
+#         print("Otherwise, run the program normally.")
+#         return "Oops"
+#     except:
+#         xList, yList = splitToXY(a)
+#         total = 0
+#         for i in range(len(xList)-1):
+#             total += (xList[i+1] - xList[i])*(yList[i+1] + yList[i])
+#         if total > 0: return True
+#         return False
+# Still not working ugh
 
 def rotateList(a,n):
-    return None
+    if n < 0: n = len(a) + n
+    for i in range(n):
+        a.insert(0, a[-1])
+        del(a[-1])
+    return a
 
 def moveToBack(a,b):
     for i in range(len(b)):
@@ -145,47 +172,88 @@ def moveToBack(a,b):
                 a.append(b[i])
     return a
 
-# Returns two lists of X and Y values from a combined list of X and Y values
-def splitToXY(L):
-    xList = L[::2]
-    yList = L[1::2]
-    return xList, yList
-
 def linearRegression(L):
     xList, yList = splitToXY(L)
     sumX, sumY = sum(xList), sum(yList)
     n = len(xList)
     sumXY = sum([xList[i] * yList[i] for i in range(n)])
     sumX2 = sum(xList[i]**2 for i in range(n))
+    sumY2 = sum(yList[i]**2 for i in range(n))
     slope = (sumX * sumY - (n * sumXY)) / ((sumX**2) - (n * sumX2))
     offset = (sumX * sumXY - (sumY * sumX2)) / ((sumX**2) - (n * sumX2))
-    yHat = [slope * xList[i] + offset for i in range(n)]
-    ssDev = sum([(yList[i] - (sumY/n)) for i in range(n)])
-    ssRes = sum([(yList[i] - yHat[i])**2 for i in range(n)])
-    if ssDev == 0: r2 = 1
-    else: r2 = (ssDev - ssRes) / ssDev
-    return slope, offset, r2
+    r = ((n*sumXY)-(sumX*sumY))/math.sqrt(((n * sumX2)-sumX**2)*(n*sumY2-sumY**2))
+    return slope, offset, r
 
 def exponentialRegression(L):
-    return None
+    xList, yList = splitToXY(L)
+    sumX = sum(xList)
+    n = len(xList)
+    sumX2 = sum(xList[i]**2 for i in range(n))
+    logY = [math.log10(yList[i]) for i in range(n)]
+    XlogY = [xList[i] * logY[i] for i in range(n)]
+    sumXlogY = sum(XlogY)
+    sumLogY = sum(logY)
+    sumLogYSquared = sum(logY[i]**2 for i in range(n))
+    a = 10**(((sumX * sumXlogY)-(sumX2*sumLogY))/((sumX)**2-n*sumX2))
+    b = 10**(((sumX*sumLogY)-n*sumXlogY)/((sumX)**2-n*sumX2))
+    r = (n*sumXlogY-sumX*sumLogY)/math.sqrt((n*sumX2-sumX**2)*(n*sumLogYSquared-sumLogY**2))
+    return a, b, r
 
 def powerRegression(L):
-    return None
+    xList, yList = splitToXY(L)
+    n = len(xList)
+    logY = [math.log10(yList[i]) for i in range(n)]
+    sumLogY = sum(logY)
+    logX = [math.log10(xList[i]) for i in range(n)]
+    sumLogX = sum(logX)
+    sumLogXlogY = sum(logX[i] * logY[i] for i in range(n))
+    sumLogXSquared = sum(logX[i]**2 for i in range(n))
+    sumLogYSquared = sum(logY[i]**2 for i in range(n))
+    a = 10**(((sumLogX*sumLogXlogY)-(sumLogXSquared*sumLogY))/((sumLogX)**2-(n*sumLogXSquared)))
+    b = ((sumLogX*sumLogY)-(n*sumLogXlogY))/(((sumLogX)**2)-(n*sumLogXSquared))
+    r = (n*sumLogXlogY-sumLogX*sumLogY)/math.sqrt((n*sumLogXSquared-sumLogX**2)*(n*sumLogYSquared-sumLogY**2))
+    return a, b, r
 
 def logarithmicRegression(L):
-    return None
+    xList, yList = splitToXY(L)
+    sumY = sum(yList)
+    n = len(xList)
+    sumY2 = sum(yList[i]**2 for i in range(n))
+    logY = [math.log(yList[i]) for i in range(n)]
+    logX = [math.log(xList[i]) for i in range(n)]
+    sumLogX = sum(logX)
+    sumYlogX = sum([yList[i] * logX[i] for i in range(n)])
+    sumLogXSquared = sum(logX[i]**2 for i in range(n))
+    a = ((sumLogX*sumYlogX)-(sumLogXSquared*sumY))/((sumLogX**2)-n*sumLogXSquared)
+    b = ((sumLogX*sumY)-(n*sumYlogX))/((sumLogX**2)-(n*sumLogXSquared))
+    r = (n*sumYlogX-sumLogX*sumY)/math.sqrt((n*sumLogXSquared-sumLogX**2)*(n*sumY2-sumY**2))
+    return a, b, r
 
 def functionOfBestFit(L):
-    return None
+    linearA, linearB, linearR = linearRegression(L)
+    exponentialA, exponentialB, exponentialR = exponentialRegression(L)
+    powerA, powerB, powerR = powerRegression(L)
+    logA, logB, logR = logarithmicRegression(L)
+    if linearR > max(exponentialR, powerR, logR): return linearA, linearB, "L"
+    if exponentialR > max(linearR, powerR, logR): return exponentialA, exponentialB, "E"
+    if powerR > max(linearR, exponentialR, logR): return powerA, powerB, "P"
+    if logR > max(linearR, exponentialR, powerR): return logA, logB, "N"
 
 def nthLuckyPrime (n):
     return None
 
 def crossProduct(a,b):
-    return None
+    c = [a[1]*b[2] - a[2]*b[1],
+         a[2]*b[0] - a[0]*b[2],
+         a[0]*b[1] - a[1]*b[0]]
+    return tuple(c)
 
 def binaryListToDecimal(a):
-    return None
+    decimal = 0
+    for i in range(len(a)):
+        binary = a.pop() # Removes the element from the list and returns it
+        if binary == 1: decimal += pow(2, i)
+    return decimal
 
 def bowlingScore(a):
     return None
