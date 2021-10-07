@@ -219,7 +219,6 @@ def logarithmicRegression(L):
     sumY = sum(yList)
     n = len(xList)
     sumY2 = sum(yList[i]**2 for i in range(n))
-    logY = [math.log(yList[i]) for i in range(n)]
     logX = [math.log(xList[i]) for i in range(n)]
     sumLogX = sum(logX)
     sumYlogX = sum([yList[i] * logX[i] for i in range(n)])
