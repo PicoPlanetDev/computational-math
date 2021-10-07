@@ -124,13 +124,37 @@ def smallestDifference(a):
     return smallestDifference
 
 def lookAndSay(L):
-    return None
+    if L==[]: return []
+    said = []
+    count = 1
+    last = 0
+    for i in range(len(L)-1):
+        last = L[i]
+        if L[i] == L[i+1]: count += 1
+        else:
+            said.append((count,last))
+            count = 1
+    said.append((count,L[-1]))
+    return said
 
 def inverseLookAndSay(L):
-    return None
+    number = []
+    for i in range(len(L)):
+        for j in range(L[i][0]):
+            number.append(L[i][1])
+    return number
 
 def makeLookAndSay(L,g):
-    return None
+    list = L
+    for i in range(g):
+        generation = []
+        lookAndSayList = lookAndSay(list)
+        for j in range(len(lookAndSayList)):
+            generation.append(lookAndSayList[j][0])
+            generation.append(lookAndSayList[j][1])
+        list = generation
+    return list
+
 
 # Returns two lists of X and Y values from a combined list of X and Y values
 def splitToXY(L):
