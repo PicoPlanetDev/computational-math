@@ -144,6 +144,7 @@ def inverseLookAndSay(L):
             number.append(L[i][1])
     return number
 
+# Gets very slow after about g=20
 def makeLookAndSay(L,g):
     list = L
     for i in range(g):

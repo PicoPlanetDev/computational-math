@@ -47,4 +47,4 @@ def makeLookAndSay(L,g):
         list = generation
     return list
 
-print(makeLookAndSay([3,3,7,7,7], 4))
+print(makeLookAndSay([3,3,7,7,7], 30))
