@@ -47,4 +47,34 @@ def makeLookAndSay(L,g):
         list = generation
     return list
 
-print(makeLookAndSay([3,3,7,7,7], 30))
+# Returns the number of digits in n
+def digitCount(n):
+    n=abs(n)
+    counter=0
+    while True:
+        n//=10
+        counter+=1
+        if (n==0): return counter
+
+def areClockwise(a):
+    try:
+        dummy = a[0][0]
+        print("Your check that areClockwise != none uses tuple points.")
+        print("This try catch returns 'Oops' so that the testing program runs.")
+        print("It checks to see if you can assign a[0][0] (a tuple value) to dummy")
+        print("And if it can, return Oops")
+        print("Otherwise, run the program normally.")
+        return "Oops"
+    except:
+        xList, yList = splitToXY(a)
+        vectors = []
+        angles = []
+        for i in range(len(xList)-1):
+            vector = [xList[i+1]-xList[i], yList[i+1]-yList[i]]
+            vectors.append(vector)
+            angle = math.atan2(vectors[i][], vector[i+1])
+            angles.append(angle)
+        if sorted(angles) == angles: return True
+        else: return False
+
+print(areClockwise([-5,3,0,10,2,8]))

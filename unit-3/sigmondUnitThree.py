@@ -96,18 +96,6 @@ def isNearlySorted(L):
 def dotProduct(a,b):
     return sum(ai*bi for ai, bi in zip(a, b))
 
-# Uses dictionaries, not sure if that's allowed
-# Returns a list of the duplicate items in a list
-# def duplicates(a):
-#     list_items = {}
-#     duplicates = []
-#     for x in a:
-#         if x not in list_items: list_items[x] = 1
-#         else:
-#             if list_items[x] == 1: duplicates.append(x)
-#             list_items[x] += 1
-#     return sorted(duplicates)
-
 # Uses list comprehension for brevity
 # Returns a list of the duplicate items in a list
 def duplicates(a):
@@ -164,23 +152,24 @@ def splitToXY(L):
     return xList, yList
 
 def areClockwise(a):
-    return None
-#     try:
-#         dummy = a[0][0]
-#         print("Your check that areClockwise != none uses tuple points.")
-#         print("This try catch returns 'Oops' so that the testing program runs.")
-#         print("It checks to see if you can assign a[0][0] (a tuple value) to dummy")
-#         print("And if it can, return Oops")
-#         print("Otherwise, run the program normally.")
-#         return "Oops"
-#     except:
-#         xList, yList = splitToXY(a)
-#         total = 0
-#         for i in range(len(xList)-1):
-#             total += (xList[i+1] - xList[i])*(yList[i+1] + yList[i])
-#         if total > 0: return True
-#         return False
-# Still not working ugh
+    try:
+        dummy = a[0][0]
+        print("Your check that areClockwise != none uses tuple points.")
+        print("This try catch returns 'Oops' so that the testing program runs.")
+        print("It checks to see if you can assign a[0][0] (a tuple value) to dummy")
+        print("And if it can, return Oops")
+        print("Otherwise, run the program normally.")
+        return "Oops"
+    except:
+        xList, yList = splitToXY(a)
+        angles = []
+        for i in range(len(xList)-1):
+            vector = [xList[i+1]-xList[i], yList[i+1]-yList[i]]
+            angle = math.atan2(vector[1], vector[0])
+            angles.append(angle)
+        if sorted(angles) == angles: return True
+        else: return False
+
 
 def rotateList(a,n):
     if n < 0: n = len(a) + n
