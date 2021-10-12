@@ -152,24 +152,22 @@ def splitToXY(L):
     return xList, yList
 
 def areClockwise(a):
-    try:
-        dummy = a[0][0]
-        print("Your check that areClockwise != none uses tuple points.")
-        print("This try catch returns 'Oops' so that the testing program runs.")
-        print("It checks to see if you can assign a[0][0] (a tuple value) to dummy")
-        print("And if it can, return Oops")
-        print("Otherwise, run the program normally.")
-        return "Oops"
-    except:
-        xList, yList = splitToXY(a)
-        angles = []
-        for i in range(len(xList)-1):
-            vector = [xList[i+1]-xList[i], yList[i+1]-yList[i]]
-            angle = math.atan2(vector[1], vector[0])
-            angles.append(angle)
-        if sorted(angles) == angles: return True
-        else: return False
-
+    # try:
+    #     dummy = a[0][0]
+    #     print("Your check that areClockwise != none uses tuple points.")
+    #     print("This try catch returns 'Oops' so that the testing program runs.")
+    #     print("It checks to see if you can assign a[0][0] (a tuple value) to dummy")
+    #     print("And if it can, return Oops")
+    #     print("Otherwise, run the program normally.")
+    #     return "Oops"
+    # except:
+    #     xList, yList = splitToXY(a)
+    #     n = 0
+    #     for i in range(len(xList)-1):
+    #         n += (xList[i+1]-xList[i])*(yList[i]-yList[i+1])
+    #     if n < 0: return False
+    #     else: return True
+    return None
 
 def rotateList(a,n):
     if n < 0: n = len(a) + n
@@ -252,7 +250,24 @@ def functionOfBestFit(L):
     if powerR > max(linearR, exponentialR, logR): return powerA, powerB, "P"
     if logR > max(linearR, exponentialR, powerR): return logA, logB, "N"
 
+def isPrime(n):
+    if (n < 2): return False
+    if (n == 2): return True
+    if (n % 2 == 0): return False
+    for factor in range(3,round(n**0.5)+1,2):
+        if (n % factor == 0): return False
+    return True
+
 def nthLuckyPrime (n):
+    # lucky=list(range(-1,n,2))
+    # i=2
+    # while lucky[i:]:
+    #     lucky=sorted(set(lucky)-set(lucky[lucky[i]::lucky[i]]));i+=1
+    # del(lucky[0])
+    # for i in lucky:
+    #     if not isPrime(i):
+    #         del(lucky[lucky.index(i)])
+    # return lucky
     return None
 
 def crossProduct(a,b):
@@ -269,7 +284,25 @@ def binaryListToDecimal(a):
     return decimal
 
 def bowlingScore(a):
-    return None
+    total = 0
+    frame = 0
+    isNextFrame = True
+    for i, currentRoll in enumerate(a):
+        if frame == 10:
+            break # End of game, check first for speed
+        if currentRoll == 10:
+            total += a[i + 1] # Add next roll
+            total += a[i + 2] # Also add the role after that
+            frame += 1 # Move on to the next frame
+        elif not isNextFrame:
+            # Update the scores after changing them
+            if a[i - 1] + currentRoll == 10: total += a[i + 1]
+            frame += 1
+            isNextFrame = True # Finish up with that frame, allow scores to move to next
+        else:
+            isNextFrame = False
+        total += currentRoll # Add the current roll to the total
+    return total
 
 def carrylessMultiply(x,y):
     return None
