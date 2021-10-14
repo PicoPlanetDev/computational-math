@@ -17,11 +17,16 @@ def sieveOfEratosthenes(n):
         if prime[p]: primeNumbers.append(p)
     return primeNumbers
 
+# Returns two lists of X and Y values from a combined list of X and Y values
+def splitToXY(L):
+    xList = L[::2]
+    yList = L[1::2]
+    return xList, yList
+
 # Returns the area of a polygon defined by points in the following form
 # L = [x1, y1, x2, y2, ... xn, yn]
 def areaOfPolygon(L):
-    xList = L[::2]
-    yList = L[1::2]
+    xList, yList = splitToXY(L)
     area = 0
     for i in range(len(xList)-1):
         area += (xList[i]*yList[i+1])-(xList[i+1]*yList[i])
@@ -35,8 +40,7 @@ def areaOfPolygon(L):
 # Returns the signed area of a polygon defined by points in the following form
 # L = [x1, y1, x2, y2, ... xn, yn]
 def signedAreaOfPolygon(L):
-    xList = L[::2]
-    yList = L[1::2]
+    xList, yList = splitToXY(L)
     area = 0
     for i in range(len(xList)-1):
         area += (xList[i]*yList[i+1])-(xList[i+1]*yList[i])
@@ -47,8 +51,7 @@ def signedAreaOfPolygon(L):
 # Returns the centroid of a polygon defined in the same format as the area functions above
 # Works for any polygon, not just ones where the centroid is the arithmetic mean of the points
 def centroidOfPolygon(L):
-    xList = L[::2]
-    yList = L[1::2]
+    xList, yList = splitToXY(L)
     xCentroid = 0
     yCentroid = 0
     for i in range(-1, len(xList)-1):
@@ -143,13 +146,6 @@ def makeLookAndSay(L,g):
             generation.append(lookAndSayList[j][1])
         list = generation
     return list
-
-
-# Returns two lists of X and Y values from a combined list of X and Y values
-def splitToXY(L):
-    xList = L[::2]
-    yList = L[1::2]
-    return xList, yList
 
 def areClockwise(a):
     # try:
@@ -250,24 +246,7 @@ def functionOfBestFit(L):
     if powerR > max(linearR, exponentialR, logR): return powerA, powerB, "P"
     if logR > max(linearR, exponentialR, powerR): return logA, logB, "N"
 
-def isPrime(n):
-    if (n < 2): return False
-    if (n == 2): return True
-    if (n % 2 == 0): return False
-    for factor in range(3,round(n**0.5)+1,2):
-        if (n % factor == 0): return False
-    return True
-
 def nthLuckyPrime (n):
-    # lucky=list(range(-1,n,2))
-    # i=2
-    # while lucky[i:]:
-    #     lucky=sorted(set(lucky)-set(lucky[lucky[i]::lucky[i]]));i+=1
-    # del(lucky[0])
-    # for i in lucky:
-    #     if not isPrime(i):
-    #         del(lucky[lucky.index(i)])
-    # return lucky
     return None
 
 def crossProduct(a,b):
@@ -288,8 +267,7 @@ def bowlingScore(a):
     frame = 0
     isNextFrame = True
     for i, currentRoll in enumerate(a):
-        if frame == 10:
-            break # End of game, check first for speed
+        if frame == 10: break # End of game, check first for speed
         if currentRoll == 10:
             total += a[i + 1] # Add next roll
             total += a[i + 2] # Also add the role after that
@@ -299,8 +277,7 @@ def bowlingScore(a):
             if a[i - 1] + currentRoll == 10: total += a[i + 1]
             frame += 1
             isNextFrame = True # Finish up with that frame, allow scores to move to next
-        else:
-            isNextFrame = False
+        else: isNextFrame = False
         total += currentRoll # Add the current roll to the total
     return total
 
