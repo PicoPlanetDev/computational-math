@@ -75,4 +75,37 @@ def nthLuckyPrime(n):
             del(lucky[lucky.index(i)])
     return lucky
 
-print(nthLuckyPrime(10))
+# Returns the number of digits in n
+def digitCount(n):
+    n=abs(n)
+    counter=0
+    while True:
+        n//=10
+        counter+=1
+        if (n==0): return counter
+
+def carrylessAdd(x,y):
+    result = 0
+    place = 1
+    result = 0
+    while (x or y) :
+        result = (((x % 10) + (y % 10))%10 * place) + result
+        x = math.floor(x / 10)
+        y = math.floor(y / 10)
+        place *= 10
+    return result
+
+def carrylessMultiply(x,y):
+    xLength = digitCount(x)
+    yLength = digitCount(y)
+    multSum = 0
+    lineSum = 0
+    for i in range(0,yLength):
+        yDigit = (y//10**i)%10
+        for j in range(0, xLength):
+            xDigit = (x//10**j)%10
+            multSum = multSum + (yDigit * xDigit)
+        lineSum = carrylessAdd(lineSum, ((multSum)*10**i))
+    return lineSum
+
+print(carrylessMultiply(643,59))

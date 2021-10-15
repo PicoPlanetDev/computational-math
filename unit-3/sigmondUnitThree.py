@@ -281,6 +281,26 @@ def bowlingScore(a):
         total += currentRoll # Add the current roll to the total
     return total
 
+# Returns the number of digits in n
+def digitCount(n):
+    n=abs(n)
+    counter=0
+    while True:
+        n//=10
+        counter+=1
+        if (n==0): return counter
+
+def carrylessAdd(x,y):
+    result = 0
+    place = 1
+    result = 0
+    while (x or y) :
+        result = (((x % 10) + (y % 10))%10 * place) + result
+        x = math.floor(x / 10)
+        y = math.floor(y / 10)
+        place *= 10
+    return result
+
 def carrylessMultiply(x,y):
     return None
 
