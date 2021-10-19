@@ -246,7 +246,14 @@ def functionOfBestFit(L):
     if powerR > max(linearR, exponentialR, logR): return powerA, powerB, "P"
     if logR > max(linearR, exponentialR, powerR): return logA, logB, "N"
 
-def nthLuckyPrime (n):
+# Sieve of lucky numbers and sieve of prime numbers to generate
+# lucky primes up to n and return the nth lucky prime
+def nthLuckyPrime(n):
+    # sieve = [True] * n
+    # for i in range(3, int(n**0.5) + 1, 2):
+    #     if sieve[i]:
+    #         sieve[i*i::2*i] = [False] * ((n-i*i-1)//(2*i)+1)
+    # return [2] + [i for i in range(3,n,2) if sieve[i]]
     return None
 
 def crossProduct(a,b):
