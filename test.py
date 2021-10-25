@@ -150,4 +150,18 @@ def bowlingScore(a):
         total += currentRoll # Add the current roll to the total
     return total
 
-print(bowlingScore([8,2,10,10,10,5,4,10,8,0,10,10,3,6]))
+def rotateList(a,n):
+    if n < 0: n = len(a) + n
+    for i in range(n):
+        a.insert(0, a[-1])
+        del(a[-1])
+    return a
+
+
+def fibonacciNumbersInList(L):
+    fibonacci_numbers = [0, 1]
+    for i in range(2,32):
+        fibonacci_numbers.append(fibonacci_numbers[i-1]+fibonacci_numbers[i-2])
+    print(fibonacci_numbers)
+
+print(fibonacciNumbersInList([1,2,3]))
