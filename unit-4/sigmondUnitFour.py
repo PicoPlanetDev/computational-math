@@ -14,7 +14,7 @@ def removeRowAndCol(a,r,c):
 
 def isMagicSquare(L):
     rowLength = len(L)
-    #columnLengt
+    #columnLength
 
 def makeMagicSquare(n):
     return None
