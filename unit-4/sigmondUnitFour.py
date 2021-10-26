@@ -5,16 +5,24 @@ import random
 def almostEqual(x,y):
     return abs(x-y)<10**-8
 
+# Note to self for logic and stuff:
+# A 2D array looks like this:
+# array = [[7,8,9],
+#          [4,5,6],
+#          [1,2,3]]
+# where each row is effectively a list of numbers
+# and each column is a spot in the row's list
+
+# Removes the row and column specified by row and col from 2D array a
 def removeRowAndCol(a,r,c):
     L = copy.deepcopy(a)
-    del L[r]
+    del L[r] # remove the entire row r
     for i in range(len(L)):
-        del L[i][c]
+        del L[i][c] # remove the column c from each of the items in rows
     return L
 
 def isMagicSquare(L):
-    rowLength = len(L)
-    #columnLength
+    return None
 
 def makeMagicSquare(n):
     return None
