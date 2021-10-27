@@ -21,11 +21,150 @@ def removeRowAndCol(a,r,c):
         del L[i][c] # remove the column c from each of the items in rows
     return L
 
+# Returns the number of rows in the list
+def rowLength(L):
+    return len(L)
+
+# Returns the number of columns in the first row of the list
+# Or something like that, point being, if the list is ragged or jagged
+# it will not be accurate for every row
+def colLength(L):
+    return len(L[0])
+
+# Tests if n is an integer, or a float with no decimal places
+def isInteger(n):
+    if isinstance(n, int):
+        return True
+    if isinstance(n, float):
+        return n.is_integer()
+    return False
+
+# Sums the row r in list L
+def rowSum(L,r):
+    return sum(L[r])
+
+# Sums the column c in list L
+def colSum(L, c):
+    total = 0
+    try:
+        for row in L:
+            total += row[c]
+        return total
+    except:
+        return "Col out of range"
+
+# Sums the diagonal of a 2D array
+# It is left to right if d is 0
+# It is right to left if d is 1
+# Kinda hacky
+def diagonalSum(L, d):
+    rows = rowLength(L)
+    total = 0
+    for i in range(rows):
+        if d == 0:
+            total += L[i][i]
+        if d == 1:
+            total += L[rows-i-1][rows-i-1]
+    return total
+
+# Flattens a 2D list into a 1D list
+def flattenList(L):
+    flattened = []
+    for row in L:
+        for col in row:
+            flattened.append(col)
+    return flattened
+
+# Returns a list of the duplicate items in a list (from Unit 3)
+def duplicates(a):
+    return sorted(set([x for x in a if a.count(x) > 1]))
+
 def isMagicSquare(L):
-    return None
+    # Ensure that list is not empty
+    if L == []: return False
+
+    # Ensure that everything in the list is a list (kind of ensures that it is 2D)
+    for i in range(len(L)):
+        if not isinstance(L[i], list): return False
+    
+    # Get the row and column lengths
+    rows, cols = rowLength(L), colLength(L)
+
+    # Ensures that the list is square and not jagged or ragged
+    if rows != cols: return False
+
+    # Flatten the 2D list into 1D for some checks
+    flattened = flattenList(L)
+
+    # Ensure that every element is only an integer
+    for item in flattened:
+        if not isInteger(item): return False
+
+    # Ensure that there are no duplicates in the square
+    if duplicates(flattened) != []: return False
+
+    # Gather row sums
+    rowSums = [rowSum(L, i) for i in range(rows)]
+    minRowSums, maxRowSums = min(rowSums), max(rowSums)
+
+    # Gather column sums
+    colSums = [colSum(L, i) for i in range(cols)]
+    minColSums, maxColSums = min(colSums), max(colSums)
+
+    # Gather diagonal sums
+    diagSum0 = diagonalSum(L, 0)
+    diagSum1 = diagonalSum(L, 1)
+    
+    # Recently learned you can break if statements into multiple lines like other things
+    # If all the sums are equal, return true
+    if minRowSums == \
+       maxRowSums == \
+       minColSums == \
+       maxColSums == \
+       diagSum0 == \
+       diagSum1:
+        return True
+
+    # Otherwise, return false
+    return False
+
+# If n is an even number return true
+def isEven(n):
+    return n%2 == 0
 
 def makeMagicSquare(n):
-    return None
+    # If n is not an odd number, return an empty list
+    if isEven(n): return []
+
+    # Create a 2D list of zeros
+    squareList = [[0 for x in range(n)] for y in range(n)]
+    
+    # Create iterators for the loop
+    i = n / 2
+    j = n - 1
+
+    # Start with 1
+    num = 1
+    # Run the loop until the square is full
+    while num <= (n * n):
+        if i == -1 and j == n:
+            j = n - 2
+            i = 0
+        else:
+            if j == n: j = 0
+            if i < 0: i = n - 1
+ 
+        if squareList[int(i)][int(j)]:
+            j = j - 2
+            i = i + 1
+        else:
+            squareList[int(i)][int(j)] = num
+            num = num + 1
+ 
+        j = j + 1
+        i = i - 1
+ 
+    return squareList
 
 def findPrimitives(p):
     return None
@@ -33,7 +172,22 @@ def findPrimitives(p):
 def isLatinSquare(L):
     return None
 
+# Modified from Unit 3
+def rotateList(a,n):
+    listToRotate = a
+    if n < 0: n = len(listToRotate) + n
+    for i in range(n):
+        listToRotate.insert(0, listToRotate[-1])
+        del(listToRotate[-1])
+    return listToRotate
+
 def makeLatinSquare(n):
+    # baseList = list(range(1,n))
+    # square = []
+    # for i in range(n):
+    #     square.append(rotateList(baseList, i))
+    # print(square)
+    # return square
     return None
 
 def matrixMultiply(m1,m2):         
