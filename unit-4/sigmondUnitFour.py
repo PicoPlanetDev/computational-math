@@ -79,14 +79,14 @@ def flattenList(L):
 def duplicates(a):
     return sorted(set([x for x in a if a.count(x) > 1]))
 
-def isMagicSquare(L):
+def passesSquareChecks(L):
     # Ensure that list is not empty
     if L == []: return False
 
     # Ensure that everything in the list is a list (kind of ensures that it is 2D)
     for i in range(len(L)):
         if not isinstance(L[i], list): return False
-    
+
     # Get the row and column lengths
     rows, cols = rowLength(L), colLength(L)
 
@@ -100,8 +100,17 @@ def isMagicSquare(L):
     for item in flattened:
         if not isInteger(item): return False
 
+    return True
+
+def isMagicSquare(L):
+    if not passesSquareChecks(L): return False
+
+    flattened = flattenList(L)
     # Ensure that there are no duplicates in the square
     if duplicates(flattened) != []: return False
+
+    # Get the row and column lengths
+    rows, cols = rowLength(L), colLength(L)
 
     # Gather row sums
     rowSums = [rowSum(L, i) for i in range(rows)]
@@ -170,25 +179,27 @@ def findPrimitives(p):
     return None
 
 def isLatinSquare(L):
-    return None
+    if not passesSquareChecks(L): return False
+    rows, cols = rowLength(L), colLength(L)
+    flattened = flattenList(L)
+    if rows != cols: return False
+    setOfFlat = sorted(list(set(flattened)))
+    for row in L:
+        if setOfFlat != sorted(row): return False
+    return True
 
-# Modified from Unit 3
-def rotateList(a,n):
-    listToRotate = a
-    if n < 0: n = len(listToRotate) + n
-    for i in range(n):
-        listToRotate.insert(0, listToRotate[-1])
-        del(listToRotate[-1])
-    return listToRotate
-
+# Pretty cool list comprehension here, most involved one I've made yet
+# Creates a latin square of size n
 def makeLatinSquare(n):
-    # baseList = list(range(1,n))
-    # square = []
-    # for i in range(n):
-    #     square.append(rotateList(baseList, i))
-    # print(square)
-    # return square
-    return None
+    # List comprehension, explained outside in:
+    # To end up with a square of size n, we need to make a list of n lists (outer for in in range(n))
+    # Each of those lists will have n items (inner for in range(n))
+    # Each of those alternates between counting down and u
+    # And using modulo to wrap around the excess to the next line
+    latinSquare = [[(((b//2)+1 if (b%2 != 0) else (n-b//2)) + a) % n + 1 for b in range(n)] for a in range(n)]
+    # If the square is odd, run through one more time with the reversed order
+    if n % 2 != 0: latinSquare += [part[::-1] for part in latinSquare]
+    return latinSquare
 
 def matrixMultiply(m1,m2):         
     return None
