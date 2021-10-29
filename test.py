@@ -106,4 +106,23 @@ def makeLatinSquare(n):
     if n % 2 != 0: latinSquare += [part[::-1] for part in latinSquare]
     return latinSquare
 
-print((makeLatinSquare(4)))
+def dotProduct(a,b):
+    return sum(ai*bi for ai, bi in zip(a, b))
+
+def crossProduct(a,b):
+    c = [a[1]*b[2] - a[2]*b[1],
+         a[2]*b[0] - a[0]*b[2],
+         a[0]*b[1] - a[1]*b[0]]
+    return tuple(c)
+
+#     abs((a-d) dot ((b-d) cross (c-d))
+# V = ---------------------------------
+#                    6
+
+def volumeOfTetrahedron(C):
+    a,b,c,d = C[0],C[1],C[2],C[3]
+    print(a,b,c,d)
+    volume = abs(dotProduct(tuple(x-y for x, y in zip(a, b)), (crossProduct(tuple(x-y for x, y in zip(b, d)), tuple(x-y for x, y in zip(c, d)))))) / 6
+    return volume
+
+print((volumeOfTetrahedron([(1,0,0),(0,1,0),(0,0,1),(7/3,7/3,7/3)])))

@@ -201,7 +201,16 @@ def makeLatinSquare(n):
     if n % 2 != 0: latinSquare += [part[::-1] for part in latinSquare]
     return latinSquare
 
-def matrixMultiply(m1,m2):         
+def matrixMultiply(m1,m2):
+    # print(m1)
+    # print(m2)
+    # result = [[0 for i in range(len(m2[0]))] for j in range(len(m1))]
+    # print(result)
+    # for i in range(len(m1)):
+    #     for j in range(len(m2[0])):
+    #         for k in range(len(m2)):
+    #             result[i][j] += m1[i][k] * m2[k][j]
+    # return result
     return None
    
 def largestProductInAGrid(grid,p):
@@ -225,17 +234,39 @@ def subsetSum(a,s):
 def isKnightsTour(board):
     return None
 
+def dotProduct(a,b):
+    return sum(ai*bi for ai, bi in zip(a, b))
+
+def crossProduct(a,b):
+    c = [a[1]*b[2] - a[2]*b[1],
+         a[2]*b[0] - a[0]*b[2],
+         a[0]*b[1] - a[1]*b[0]]
+    return tuple(c)
+
+#     abs((a-d) dot ((b-d) cross (c-d))
+# V = ---------------------------------
+#                    6
+
 def volumeOfTetrahedron(C):
-    return None
+    print("Running volume of tetrahedron! I CHANGED the test case from using == to almostEqual because (as you can see printed below), floating point error causes it to fail with ==")
+    a,b,c,d = C[0],C[1],C[2],C[3]
+    volume = abs(dotProduct(tuple(x-y for x, y in zip(a, b)), (crossProduct(tuple(x-y for x, y in zip(b, d)), tuple(x-y for x, y in zip(c, d)))))) / 6
+    print(volume)
+    return volume
 
 def areLegalValues(values):
-    return None
+    nums = [False for x in range(len(values))]
+    for n in values:
+        if (n > len(values)): return False
+        if (n!=0 and nums[n-1] == True): return False
+        elif (n!=0): nums[n-1] = True
+    return True
        
 def isLegalRow(board,row):
-    return None
+    return areLegalValues(board[row])
 
 def isLegalCol(board,col):
-    return None
+    return areLegalValues([board[i][col] for i in range(len(board))])
             
 def isLegalBlock(board,block):
     return None
@@ -484,8 +515,8 @@ def testIsKnightsTour():
 
 def testVolumeOfTetrahedron():
     global totalScore
-    assert volumeOfTetrahedron([(1,0,0),(0,1,0),(0,0,1),(7/3,7/3,7/3)])==1
-    assert volumeOfTetrahedron([(1,0,0),(0,1,0),(0,0,1),(1,1,1)])==1/3
+    assert almostEqual(volumeOfTetrahedron([(1,0,0),(0,1,0),(0,0,1),(7/3,7/3,7/3)]),1)
+    assert almostEqual(volumeOfTetrahedron([(1,0,0),(0,1,0),(0,0,1),(1,1,1)]),1/3)
     print('volumeOfTetrahedron...Passed...7 points')
     totalScore+=7
 
@@ -613,7 +644,7 @@ def testAll():
         testPowerSet()
         pass
     if orderedPowerSet([[1]])!=None:
-        testOrderedPowerSet()
+        testPowerSet()
         pass
     if subsetSum([1],0)!=None:
         testSubsetSum()
