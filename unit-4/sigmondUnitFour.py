@@ -69,11 +69,7 @@ def diagonalSum(L, d):
 
 # Flattens a 2D list into a 1D list
 def flattenList(L):
-    flattened = []
-    for row in L:
-        for col in row:
-            flattened.append(col)
-    return flattened
+    return [col for row in L for col in row]
 
 # Returns a list of the duplicate items in a list (from Unit 3)
 def duplicates(a):
@@ -217,6 +213,7 @@ def powerSet(a):
     inputList = a
     lenInputList = len(inputList)
     powerSetList = []
+    # Bitwise xor (exclusive or) is used here and in the inner list
     for i in range((1*(2^lenInputList))):
         sublist = []
         for j in range(lenInputList):
@@ -230,14 +227,14 @@ def orderedPowerSet(S):
 
     # Create a list of lengths of the sublists of the power set
     lengths = [len(x) for x in unorderedPowerSet]
-    
+
     # Zip the lists (to combine the lengths and the power set)
     # Then sort the zipped list using the lengths
     # And finally drop the lengths out of the sorted zipped list
     orderedPowerSet = [x for _,x in sorted(zip(lengths,unorderedPowerSet))]
     return orderedPowerSet
 
-def subsetSum(a,s):
+def subsetSum(n,s):
     return None
 
 def isKnightsTour(board):
@@ -257,11 +254,9 @@ def crossProduct(a,b):
 #                    6
 
 def volumeOfTetrahedron(C):
-    print("Running volume of tetrahedron! I CHANGED the test case from using == to almostEqual because (as you can see printed below), floating point error causes it to fail with ==")
     a,b,c,d = C[0],C[1],C[2],C[3]
     volume = abs(dotProduct(tuple(x-y for x, y in zip(a, b)), (crossProduct(tuple(x-y for x, y in zip(b, d)), tuple(x-y for x, y in zip(c, d)))))) / 6
-    print(volume)
-    return volume
+    return round(volume,8)
 
 def areLegalValues(values):
     nums = [False for x in range(len(values))]
