@@ -131,8 +131,7 @@ def isMagicSquare(L):
        minColSums == \
        maxColSums == \
        diagSum0 == \
-       diagSum1:
-        return True
+       diagSum1: return True
 
     # Otherwise, return false
     return False
@@ -202,17 +201,9 @@ def makeLatinSquare(n):
     return latinSquare
 
 def matrixMultiply(m1,m2):
-    # print(m1)
-    # print(m2)
-    # result = [[0 for i in range(len(m2[0]))] for j in range(len(m1))]
-    # print(result)
-    # for i in range(len(m1)):
-    #     for j in range(len(m2[0])):
-    #         for k in range(len(m2)):
-    #             result[i][j] += m1[i][k] * m2[k][j]
-    # return result
+    #return [[sum(a * b for a, b in zip(m1row, m2col)) for m2col in zip(*m2)] for m1row in m1]
     return None
-   
+ 
 def largestProductInAGrid(grid,p):
     return None
 
@@ -223,10 +214,28 @@ def multiplyLinearFactors(F):
     return None
 
 def powerSet(a):
-    return None
+    inputList = a
+    lenInputList = len(inputList)
+    powerSetList = []
+    for i in range((1*(2^lenInputList))):
+        sublist = []
+        for j in range(lenInputList):
+            if (i & ((1*(2^j))) > 0): sublist.append(inputList[j])
+        powerSetList.append(sublist)
+    return powerSetList
 
 def orderedPowerSet(S):
-    return None
+    # Get the power set normally
+    unorderedPowerSet = powerSet(S)
+
+    # Create a list of lengths of the sublists of the power set
+    lengths = [len(x) for x in unorderedPowerSet]
+    
+    # Zip the lists (to combine the lengths and the power set)
+    # Then sort the zipped list using the lengths
+    # And finally drop the lengths out of the sorted zipped list
+    orderedPowerSet = [x for _,x in sorted(zip(lengths,unorderedPowerSet))]
+    return orderedPowerSet
 
 def subsetSum(a,s):
     return None
@@ -267,8 +276,9 @@ def isLegalRow(board,row):
 
 def isLegalCol(board,col):
     return areLegalValues([board[i][col] for i in range(len(board))])
-            
+
 def isLegalBlock(board,block):
+    #xPos = block * 3
     return None
 
 def isLegalSudoku(board):
