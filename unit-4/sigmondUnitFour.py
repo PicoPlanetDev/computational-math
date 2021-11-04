@@ -197,15 +197,25 @@ def makeLatinSquare(n):
     return latinSquare
 
 def matrixMultiply(m1,m2):
-    #return [[sum(a * b for a, b in zip(m1row, m2col)) for m2col in zip(*m2)] for m1row in m1]
-    return None
- 
+    m1cols = colLength(m1)
+    m2rows= rowLength(m2)
+    if m1cols != m2rows: return []
+    return [[sum(a * b for a, b in zip(m1row, m2col)) for m2col in zip(*m2)] for m1row in m1]
+
 def largestProductInAGrid(grid,p):
     return None
 
 def smallestSumInARectangularSubGrid(grid,m,n):
     return None
 
+def multiplyPolynomials(p1, p2):
+    product = [0]*(len(p1)+len(p2)-1)
+    for i in range(len(p1)):
+        for j in range(len(p2)):
+            product[i+j]+=p1[i]*p2[j]
+    return product
+
+# Might get around to this one later
 def multiplyLinearFactors(F):
     return None
 
@@ -234,7 +244,14 @@ def orderedPowerSet(S):
     orderedPowerSet = [x for _,x in sorted(zip(lengths,unorderedPowerSet))]
     return orderedPowerSet
 
-def subsetSum(n,s):
+def subsetSum(L,s):
+    # if sum(L) == s:
+    #     return L
+    # if len(L) > 1:
+    #     for subset in (L[:-1], L[1:]):
+    #         result = subsetSum(subset, s)
+    #         if result is not None:
+    #             return result
     return None
 
 def isKnightsTour(board):
@@ -252,11 +269,14 @@ def crossProduct(a,b):
 #     abs((a-d) dot ((b-d) cross (c-d))
 # V = ---------------------------------
 #                    6
-
+# Returns the volume of the tetrahedron formed by the points defined in C
+# Based on the formula above
+# Only works if test cases use ALMOST EQUAL, I reccomend modifying your test program as such
 def volumeOfTetrahedron(C):
+    print("Mr. Jackson, I MODIFIED THE volumeOfTetrahedron TEST CASES TO USE ALMOST EQUAL due to floating point error")
     a,b,c,d = C[0],C[1],C[2],C[3]
     volume = abs(dotProduct(tuple(x-y for x, y in zip(a, b)), (crossProduct(tuple(x-y for x, y in zip(b, d)), tuple(x-y for x, y in zip(c, d)))))) / 6
-    return round(volume,8)
+    return volume
 
 def areLegalValues(values):
     nums = [False for x in range(len(values))]
@@ -273,11 +293,19 @@ def isLegalCol(board,col):
     return areLegalValues([board[i][col] for i in range(len(board))])
 
 def isLegalBlock(board,block):
-    #xPos = block * 3
-    return None
+    currentBlock = []
+    blockLen = round(len(board)**0.5)
+    blockX = block // blockLen
+    blockY = block %  blockLen
+    for row in range(blockX*blockLen,(blockX+1)*blockLen):
+        for col in range(blockY*blockLen,(blockY+1)*blockLen):
+            currentBlock.append(board[row][col])
+    return areLegalValues(currentBlock)
 
 def isLegalSudoku(board):
-    return None
+    for i in range(len(board)):
+        if not isLegalBlock(board,i) or not isLegalRow(board,i) or not isLegalCol(board,i): return False
+    return True
 
 def closestDiamondToZero(s,G):
     return None
