@@ -75,6 +75,7 @@ def flattenList(L):
 def duplicates(a):
     return sorted(set([x for x in a if a.count(x) > 1]))
 
+# Basic check for isMagicSquare and isLatinSquare
 def passesSquareChecks(L):
     # Ensure that list is not empty
     if L == []: return False
@@ -296,7 +297,7 @@ def isLegalBlock(board,block):
     currentBlock = []
     blockLen = round(len(board)**0.5)
     blockX = block // blockLen
-    blockY = block %  blockLen
+    blockY = block % blockLen
     for row in range(blockX*blockLen,(blockX+1)*blockLen):
         for col in range(blockY*blockLen,(blockY+1)*blockLen):
             currentBlock.append(board[row][col])
