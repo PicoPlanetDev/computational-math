@@ -1,4 +1,8 @@
 import math
+import tkinter as tk
+
+def almostEqual(x,y):
+    return abs(x-y)<10**-8
 
 # Free
 def euler1(n):
@@ -49,18 +53,20 @@ def euler5(lower, upper):
         num *= (i // math.gcd(i, num))
     return num
 
+
 # Some of my programs take a while, so I skip them by commenting out ones that I have already done. Please uncomment to check them.
 pointTotal=0
-print('Euler #1..', euler1(1000), '...passed...3pts')
+print('Euler #1', euler1(1000), '3pts')
 pointTotal+=3
-print('Euler #2..', euler2(4*10**6), '...passed...3pts')
+print('Euler #2', euler2(4*10**6), '3pts')
 pointTotal+=3
-print('Euler #3..', euler3(600851475143), '...passed...3pts')
+print('Euler #3', euler3(600851475143), '3pts')
 pointTotal+=3
-print('Euler #4', euler4(100,1000), '...passed...3pts')
+print('Euler #4 takes a while.')
+print('Euler #4', euler4(100,1000), '3pts')
 pointTotal+=3
-print('Euler #5', euler5(1,21), '...passed...3pts')
+print('Euler #5', euler5(1,21), '3pts')
 pointTotal+=3
 
 print()
-print('Total Score...', pointTotal)
+print('Euler Problems Score...', pointTotal)
