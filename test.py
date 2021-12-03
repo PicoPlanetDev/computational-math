@@ -158,5 +158,3 @@ def matrixMultiply(m1,m2):
         m.append(r)
         r=[]
     return m
-
-print(matrixMultiply(B,C))

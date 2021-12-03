@@ -66,3 +66,4 @@ solutionToC=[1.25, -0.0, 0.5, -1.0, -0.75, -0.5, 0.5]
 print(gaussianElimination(A),gaussianElimination(A)==solutionToA)
 print(gaussianElimination(B),gaussianElimination(B)==solutionToB)
 print(gaussianElimination(C),gaussianElimination(C)==solutionToC)
+print("Gaussian elimintaion... 30pts")

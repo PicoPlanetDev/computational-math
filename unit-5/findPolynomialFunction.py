@@ -9,39 +9,27 @@ from copy import deepcopy
 def almostEqual(x,y):
     return abs(x-y)<10**-8
 
-# This is probably going to be slow because 
-# I haven't used numpy in a while and don't feel like looking up the docs
-# So it just uses normal lists
-def gaussianElimination(M):
-    matrix = deepcopy(M)
-    # Iterate through rows and columns in the array
-    for col in range(len(matrix[0])):
-        for row in range(col+1, len(matrix)):
-            # Calculate a new row value for each combination, putting these in list currentRow
-            currentRow = [(rowValue * (-(matrix[row][col] / matrix[col][col]))) for rowValue in matrix[col]]
-            matrix[row] = [sum(pair) for pair in zip(matrix[row], currentRow)] # Find the sum of each pair of row values and the r calculated above
-    # When I learned elimination, 
-    # we had to the find the other variables by putting them back in
-    # to "find Grandma"
-    variablesSolution = [] # Create a list to represent the solution
-    matrix.reverse() # If we iterate through matrix backwards we can make it easier
-    for equationSolution in range(len(matrix)):
-            if equationSolution == 0:
-                variablesSolution.append(matrix[equationSolution][-1] / matrix[equationSolution][-2])
-            else:
-                inner = 0
-                for x in range(equationSolution):
-                    inner += (variablesSolution[x]*matrix[equationSolution][-2-x])
-                # If the equation is in y=mx+b form
-                # We can rearrange it to solve for x like this:
-                # x = (y-b)/m
-                variablesSolution.append((matrix[equationSolution][-1]-inner)/matrix[equationSolution][-equationSolution-2])
-    variablesSolution.reverse() # Because we used a reversed input matrix, we need to reverse the output
-    # Remove floating point error by rounding each solution to 8 decimal places
-    # 8 is somewhat arbitrary but almostEqual uses 10**-8 so that what I picked
-    for i in range(len(variablesSolution)):
-        variablesSolution[i] = round(variablesSolution[i], 8)
-    return variablesSolution
+def gaussianElimination(m):
+    def pivot(m, n, i):
+        max_row = max(range(i, n), key=lambda r: abs(m[r][i]))
+        m[i], m[max_row] = m[max_row], m[i]
+
+    # forward elimination
+    n = len(m[0])
+    for i in range(n):
+        pivot(m, n, i)
+        for j in range(i+1, n):
+            m[j] = [m[j][k] - m[i][k]*m[j][i]/m[i][i] for k in range(n+1)]
+
+    if m[n-1][n-1] == 0: raise ValueError('No unique solution')
+
+    # backward substitution
+    x = [0] * n
+    for i in range(n-1, -1, -1):
+        s = sum(m[i][j] * x[j] for j in range(i, n))
+        x[i] = (m[i][n] - s) / m[i][i]
+    return x
+
 
 def splitTupleToXY(L):
     x,y = map(list,zip(*L))
@@ -76,14 +64,16 @@ def fitPolynomial(xList, yList):
 # Now solve the system using gaussian elimination
 # Use these values to identify the polynomial
 # This only works if there are no zeros in the input function
-# Mr. Jackson, can you help me figure out how to make it work if there are zero points?
-# def fitPolynomialGaussian(xList, yList):
-#     eliminationSet = []
-#     for i in range(len(xList)):
-#         eliminationSet.append([xList[i]**2, xList[i], 1, yList[i]])
-#     print(eliminationSet)
-#     variables = gaussianElimination(eliminationSet)
-#     print(variables)
+# Mr. Jackson, can you help me figure out how to make it work if there are zero points? as in intercepts?
+# If you go down to line 106 and change fitPolynomial to fitPolynomialGaussian, it will fail when dividing by zero
+
+def fitPolynomialGaussian(xList, yList):
+    eliminationSet = []
+    for i in range(len(xList)):
+        eliminationSet.append([xList[i]**2, xList[i], 1, yList[i]])
+    print(eliminationSet)
+    variables = gaussianElimination(eliminationSet)
+    print(variables)
 
 def graphPolynomialFunction(P, xStep, xStart, xEnd, xPoints, yPoints):
     xList = []
@@ -101,7 +91,7 @@ def graphPolynomialFunction(P, xStep, xStart, xEnd, xPoints, yPoints):
 
 def findPolynomialFunction(D):
     xList, yList = splitTupleToXY(D)
-    polynomial = fitPolynomial(xList, yList)
+    polynomial = fitPolynomialGaussian(xList, yList)
     print(polynomial)
     xListSorted, yListSorted = splitTupleToXY(sorted(D))
     graphPolynomialFunction(polynomial, 0.1, xListSorted[0]-1, yListSorted[-1]+1, xList, yList)

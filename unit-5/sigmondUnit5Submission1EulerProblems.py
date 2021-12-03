@@ -54,49 +54,50 @@ def euler5(lower, upper):
     return num
 
 def euler144():
-    int result = 0;
+    result = 0
+    # Initial conditions
+    xA = 0
+    yA = 10.1
+    xO = 1.4
+    yO = -9.6
     
-    double xA = 0.0;
-    double yA = 10.1;
+    while(xO > 0.01 or xO < -0.01 or yO < 0):
+        slopeA = (yO - yA) / (xO - xA)
     
-    double xO = 1.4;
-    double yO = -9.6;
+        slopeO = -4 * xO / yO
     
-    while(xO > 0.01 || xO < -0.01 || yO < 0){
+        tanA = (slopeA - slopeO) / (1 + slopeA * slopeO)
+        slopeB = (slopeO - tanA) / (1 + tanA * slopeO)
     
-        //Calculate the slope of A
-        double slopeA = (yO - yA) / (xO - xA);
-    
-        //Calculate the slope of the ellipse tangent
-        double slopeO = -4*xO/yO;
-    
-        //Calculate the slope of B
-        double tanA = (slopeA - slopeO)/(1+slopeA*slopeO);
-        double slopeB = (slopeO- tanA)/ (1+ tanA*slopeO);
-    
-        //calculate intercept of line B
-        double interceptB = yO - slopeB * xO;
-    
-        //solve the quadratic equation for finding
-        // the intersection of B and the ellipse
-        // a*x^2 + b*x + c = 0
-        double a = 4 + slopeB*slopeB;
-        double b = 2 * slopeB * interceptB;
-        double c = interceptB * interceptB - 100;
-    
-        double ans1 = (-b + Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-        double ans2 = (-b - Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-    
-        xA = xO;
-        yA = yO;
-    
-        //Take the solution which is furtherst from x0
-        xO = (Math.Abs(ans1 - xO) > Math.Abs(ans2 - xO)) ? ans1 : ans2;
-        yO = slopeB * xO + interceptB;
-    
-        result++;
-    }
+        interceptB = yO - slopeB * xO
 
+        # a*x^2 + b*x + c = 0
+        a = 4 + slopeB*slopeB
+        b = 2 * slopeB * interceptB
+        c = interceptB * interceptB - 100
+    
+        ans1 = (-b + math.sqrt(b * b - 4 * a * c)) / (2 * a)
+        ans2 = (-b - math.sqrt(b * b - 4 * a * c)) / (2 * a)
+    
+        xA = xO
+        yA = yO
+
+        if (abs(ans1 - xO) > abs(ans2 - xO)): xO = ans1
+        else: xO = ans2
+        yO = slopeB * xO + interceptB
+    
+        result += 1
+    return result
+
+def euler57(max):
+    total = 0
+    top = 0
+    bottom = 1
+    for i in range(max):
+        top, bottom = bottom, bottom * 2 + top
+        if len(str(top + bottom)) > len(str(bottom)):
+            total += 1
+    return total
 
 # Some of my programs take a while, so I skip them by commenting out ones that I have already done. Please uncomment to check them.
 pointTotal=0
@@ -111,6 +112,11 @@ print('Euler #4', euler4(100,1000), '3pts')
 pointTotal+=3
 print('Euler #5', euler5(1,21), '3pts')
 pointTotal+=3
+print('Euler #144', euler144(), '10pts')
+pointTotal+=10
+print('Euler #57', euler57(1000), '5pts')
+pointTotal+=5
+
 
 print()
 print('Euler Problems Score...', pointTotal)
