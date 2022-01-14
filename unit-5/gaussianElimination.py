@@ -13,6 +13,7 @@ def gaussianElimination(M):
         for row in range(col+1, len(matrix)):
             # Calculate a new row value for each combination, putting these in list currentRow
             currentRow = [(rowValue * (-(matrix[row][col] / matrix[col][col]))) for rowValue in matrix[col]]
+            #print(currentRow)
             matrix[row] = [sum(pair) for pair in zip(matrix[row], currentRow)] # Find the sum of each pair of row values and the r calculated above
     # When I learned elimination, 
     # we had to the find the other variables by putting them back in
@@ -63,7 +64,15 @@ C=[[2,3,-1,1,2,-1,2,1],
 
 solutionToC=[1.25, -0.0, 0.5, -1.0, -0.75, -0.5, 0.5]
 
-print(gaussianElimination(A),gaussianElimination(A)==solutionToA)
-print(gaussianElimination(B),gaussianElimination(B)==solutionToB)
-print(gaussianElimination(C),gaussianElimination(C)==solutionToC)
-print("Gaussian elimintaion... 30pts")
+M = [
+    [4,7,9,4],
+    [3,2,1,2],
+    [18,2,4,9]
+]
+
+# print(gaussianElimination(A),gaussianElimination(A)==solutionToA)
+# print(gaussianElimination(B),gaussianElimination(B)==solutionToB)
+# print(gaussianElimination(C),gaussianElimination(C)==solutionToC)
+# print("Gaussian elimintaion... 30pts")
+
+print(gaussianElimination(M))
