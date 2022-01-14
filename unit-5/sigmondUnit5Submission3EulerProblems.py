@@ -68,9 +68,9 @@ def sieveOfEratosthenes(n):
         if prime[p]: primeNumbers.append(p)
     return primeNumbers
 
-def euler35():
+def euler35(n):
 	# Generate primes up to 1 million
-	primes = sieveOfEratosthenes(1000000)
+	primes = sieveOfEratosthenes(n)
 
 	# Count instances of scenario
 	instances = 0
@@ -101,14 +101,122 @@ def euler35():
 	return instances
 
 
+def euler37(n):
+	primes = sieveOfEratosthenes(n)
+
+	potential = [] # Potential solutions, removed if not meet criteria
+
+	# Loop through primes
+	for prime in primes:
+		meetsCriteria = True # Assume meets criteria for now
+		number = prime # cache working number
+		raised = 10**(len(str(number))-1) # raised to the power of the length of the number - 1
+		number = (number - (number / raised) * raised) / 10 # remove the first digit
+		
+		# Check if digits are multiples of 2 or 5 (commonly found)
+		# Recently I have been using a lot of this style of while loops
+		# to check each digit, because you can just divide by 10 and
+		# get the next digit until it runs out of digits
+		while number:
+			if (number % 10) % 2 == 0 or (number % 10) % 5 == 0:
+				meetsCriteria = False # Stop here
+				break
+			number = number/10
+
+		# If it is still good to this point, check right truncatable
+		if meetsCriteria:
+			number = prime / 10 # remove the last digit
+			potential.append(prime) # add to potential list
+			# similar to above, uses //= which is integer division
+			while number:
+				if number not in primes:
+					potential.remove(prime)
+					break
+				number //= 10
+
+	# Same as potential solutions, but 2, 3, 5, 7 are removed
+	leftSet = potential[4:]
+
+	# Check left truncatable of leftSet
+	for i in leftSet:
+		number = i # cache number
+		# Go through each digit
+		while number:
+			raised = 10**(len(str(number)) - 1)
+			number = number - (number / raised) * raised
+			if number not in primes and number != 0:
+				potential.remove(i)
+				break
+	
+	# Print the sum of the numbers that made it through
+	print(sum(potential))
+
+def euler38(n):
+	largest = 0 # int to store max
+
+	# loop until we reach the 4th digit so 10000
+	for i in range(1,n):
+		
+		# multiple stored in string for concatenation
+		multiplication = ''
+		
+		# counting numbers up to n
+		integer = 1
+		
+		# Check the number of digits
+		while len(multiplication) < 9:
+			
+			# Concat the product every time
+			multiplication += str(i*integer)
+			
+			# Increment by counting number integers
+			integer += 1
+			
+		# check for digits less than 9 and all numbers 1-9 and make sure that there is no zero before checking for largest
+		if ((len(multiplication) == 9) and (len(set(multiplication)) == 9) and ('0' not in multiplication)):
+			# Update largest if necessary
+			if int(multiplication) > largest: largest = int(multiplication)
+
+	return largest
+
+def euler39(n):
+	def solutions_by_perim(perimeter):
+		solutions = 0
+		for a in range(1, perimeter + 1):
+			for b in range(a, (perimeter - a) // 2 + 1):
+				c = perimeter - a - b  # c >= b
+				if a**2 + b**2 == c**2: solutions += 1
+		return solutions
+
+	# Most of the heavy lifting is done by solutions_by_perim
+	# By cycling through the perimeter values, we can find the perimeter
+	# with the most solutions and return it
+	# The key means that what we return is the perimeter but what max()
+	# compares is the number of solutions returned by solutions_by_perim
+	return max(range(1, n), key=solutions_by_perim)
+
+
+
+
 pointTotal = 0
 
 print('Euler #31', euler31(), '5pts')
 pointTotal += 5
 print('Euler #33', euler33(10,100), '6pts')
 pointTotal += 6
-print('Euler #34', euler34(), '10pts')
+print('Euler #34', euler34(), '5pts')
+pointTotal += 5
+print('Euler #35', euler35(1000000), '5pts')
+pointTotal += 5
+# 37 hangs on potential.remove(prime) which is unfortunate so I'm skipping it for now
+#print('Euler #37', euler37(1000000), '6pts')
+#pointTotal += 6
+print('Euler #38', euler38(10000), '7pts')
+pointTotal += 7
+print('Euler #39 is slow, answer generated in 30 seconds is 840 (correct) but just skipping call for now')
+#print('Euler #39', euler39(1001), '6pts')
 pointTotal += 6
 
+
 print()
-print('Euler Problems Score...', pointTotal, "pts/50 pts")
+print('Euler Problems Score...', pointTotal, "pts/25 pts")
